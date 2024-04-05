@@ -1,14 +1,14 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
-from .forms import SignUpForm,AddRecordForm
+from .forms import *
 from .models import Record
 import datetime
 # Create your views here.
 def home(request):
     records=Record.objects.all()
     if request.method=='POST':
-        username=request.POST.get['username']
+        username=request.POST['username']
         password=request.POST['password']
         print(username,password)
         user=authenticate(request,username=username,password=password)
@@ -75,14 +75,27 @@ def delete_record(request,pk):
         return redirect('home')
     
 def add_record(request):
+    form = AddRecordForm(request.POST or None)
     if request.user.is_authenticated:
-        form=AddRecordForm(request.POST or None)
-        if request.method=="POST":
+        if request.method == "POST":
             if form.is_valid():
-                add_record=form.save()
-                messages.success(request,"Record Added successfully..")
+                add_record = form.save()
+                messages.success(request,"Record Added Successfully...")
                 return redirect('home')
-        return render(request,'add_record.html',{'form':form})
+        return render(request, 'add_record.html', {'form':form})
     else:
-        messages.success(request,"Please login to add records!")
+        messages.success(request,"You Must Be Logged In...")
+        return redirect('home')
+    
+def update_record(request,pk):
+    if request.user.is_authenticated:
+        current_record=Record.objects.get(id=pk)
+        form = AddRecordForm(request.POST or None,instance=current_record)
+        if form.is_valid():
+            form.save()
+            messages.success(request,"Record updated successfully")
+            return redirect('home')
+        return render(request, 'update_record.html', {'form':form,'current_record':current_record})
+    else:
+        messages.success(request,"You Must Be Logged In...")
         return redirect('home')

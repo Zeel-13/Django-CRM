@@ -19,4 +19,5 @@
   </div><br>
   <a type="button" class="btn btn-secondary" href="{% url "home" %}">Back</a>
   <a type="button" class="btn btn-danger" href="{% url "delete_record" record.id %}">Delete</a>
+  <a type="button" class="btn btn-primary" href="{% url "update_record" record.id %}">Update Record</a>
 {% endblock %}
