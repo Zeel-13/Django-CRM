@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from .forms import SignUpForm
 from .models import Record
+import datetime
 # Create your views here.
 def home(request):
     records=Record.objects.all()
@@ -48,7 +49,28 @@ def register_user(request):
 def record(request,pk):
     if request.user.is_authenticated:
         record=Record.objects.get(id=pk)
-        return render(request,'record.html',{'record':record})
+        x=str(record.created_at)
+        y=x[8:10]
+        z=str(datetime.datetime.now())
+        p=z[8:10]
+        q=int(p)-int(y)
+        if q==0:
+            days_before="today"
+        elif q==1:
+            days_before="yesterday"
+        else:
+            days_before=f"{q} days ago"
+        return render(request,'record.html',{'record':record ,'days_before':days_before})
     else:
         messages.success(request,"Please login to view the records!!")
+        return redirect('home')
+    
+def delete_record(request,pk):
+    if request.user.is_authenticated:
+        delete_it=Record.objects.get(id=pk)
+        delete_it.delete()
+        messages.success(request,"Record deleted successfully...")
+        return redirect('home')
+    else:
+        messages.success(request,"Please login to modify the records!!")
         return redirect('home')

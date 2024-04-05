@@ -1,4 +1,22 @@
 {% extends "base.html" %}
 {% block start  %}
-<h1>Customer record : {{record.id}}</h1>
+<h1>Customer record ID: {{record.id}}</h1><br>
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title">{{record.first_name}} {{record.last_name}}</h5>
+    </div>
+    <div class="card-body">
+      <p class="card-text"><strong>Email: </strong> {{ record.email }} </p>
+      <p class="card-text"><strong>Phone: </strong>{{ record.phone }}</p>
+      <p class="card-text"><strong>Address: </strong>{{ record.address }}</p>
+      <p class="card-text"><strong>City: </strong>{{ record.city }}</p>
+      <p class="card-text"><strong>State: </strong>{{ record.state }}</p>
+      <p class="card-text"><strong>Zipcode: </strong>{{ record.zipcode }}</p>
+    </div>
+    <div class="card-footer text-body-secondary">
+        {{ days_before }}
+    </div>
+  </div><br>
+  <a type="button" class="btn btn-secondary" href="{% url "home" %}">Back</a>
+  <a type="button" class="btn btn-danger" href="{% url "delete_record" record.id %}">Delete</a>
 {% endblock %}
