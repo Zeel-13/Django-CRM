@@ -1,14 +1,14 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
-from .forms import SignUpForm
+from .forms import SignUpForm,AddRecordForm
 from .models import Record
 import datetime
 # Create your views here.
 def home(request):
     records=Record.objects.all()
     if request.method=='POST':
-        username=request.POST['username']
+        username=request.POST.get['username']
         password=request.POST['password']
         print(username,password)
         user=authenticate(request,username=username,password=password)
@@ -33,10 +33,9 @@ def register_user(request):
         form=SignUpForm(request.POST)
         if form.is_valid():
             form.save()
-
             username=form.cleaned_data['username']
             password=form.cleaned_data['password1']
-            user=authenticate(request,usernamae=username,password=password)
+            user=authenticate(request,username=username,password=password)
             login(request,user)
             messages.success(request,"You have registered succesfully... , Welcome!")
             return redirect('home')
@@ -73,4 +72,17 @@ def delete_record(request,pk):
         return redirect('home')
     else:
         messages.success(request,"Please login to modify the records!!")
+        return redirect('home')
+    
+def add_record(request):
+    if request.user.is_authenticated:
+        form=AddRecordForm(request.POST or None)
+        if request.method=="POST":
+            if form.is_valid():
+                add_record=form.save()
+                messages.success(request,"Record Added successfully..")
+                return redirect('home')
+        return render(request,'add_record.html',{'form':form})
+    else:
+        messages.success(request,"Please login to add records!")
         return redirect('home')
