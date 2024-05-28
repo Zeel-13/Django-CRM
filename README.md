@@ -31,3 +31,8 @@ View Record
 Update Record Page
 
 ![Screenshot (328)](https://github.com/Zeel-13/Django-CRM/assets/136904394/2c373d4a-4456-45d4-9d60-7f5d53e45200)
+<hr>
+Database
+
+![image](https://github.com/Zeel-13/Django-CRM/assets/136904394/51f11f67-3145-4b34-b4ae-bc221e13b411)
+
