@@ -3,6 +3,7 @@
 import os
 import sys
 
+# just for checking git working
 
 def main():
     """Run administrative tasks."""
